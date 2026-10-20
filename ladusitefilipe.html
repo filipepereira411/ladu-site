@@ -3,168 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Criptográfico - King TOOT da FLDA</title>
+    <title>Pagamento Seguro MB WAY</title>
     
-    <!-- Script público para gerar Códigos QR automaticamente -->
-    <script src="https://cloudflare.com"></script>
-
+    <!-- CSS Incorporado: Interface Limpa, Moderna e Focada em Conversão -->
     <style>
         :root {
-            --primary: #2ea44f;
-            --primary-hover: #2c974b;
+            --mbway-pink: #ff007f;
+            --mbway-hover: #e00070;
             --dark: #24292f;
             --bg: #f6f8fa;
             --border: #d0d7de;
-            --mbway: #d81b60;
-            --mbway-hover: #ad1457;
+            --success: #1a7f37;
             --success-bg: #dafbe1;
-            --success-text: #1a7f37;
         }
+
         * { box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--dark);
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
-        .container {
+
+        .checkout-card {
             background: #ffffff;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            max-width: 750px;
+            border-radius: 12px;
+            max-width: 450px;
             width: 100%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .order-summary {
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-summary span {
+            font-size: 14px;
+            color: #57606a;
+        }
+
+        .order-summary .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .form-group {
             margin-bottom: 20px;
         }
-        .header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 25px; }
-        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
-        .badge { background: #ddf4ff; color: #0969da; border: 1px solid #b6e3ff; padding: 4px 10px; border-radius: 2em; font-size: 12px; font-weight: 600; display: inline-block; margin-top: 8px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
-        input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
-        textarea { height: 130px; font-family: monospace; font-size: 12px; }
-        .btn { background-color: var(--primary); color: #ffffff; border: 1px solid rgba(27, 31, 36, 0.15); padding: 14px 28px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; text-align: center; }
-        .btn:hover { background-color: var(--primary-hover); }
-        .result-section { margin-top: 30px; display: none; }
-        .token-box { background-color: var(--success-bg); border: 1px solid #a5d6a7; padding: 18px; border-radius: 6px; word-break: break-all; font-family: monospace; font-size: 14px; color: var(--success-text); }
-        
-        /* Secção Exclusiva MB WAY */
-        .mbway-box {
-            background: #fff0f5;
-            border: 1px solid #f8bbd0;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 750px;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
-        .mbway-title { color: var(--mbway); font-weight: bold; font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-mbway { background-color: var(--mbway); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.2s; }
+
+        .phone-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #ffffff;
+            padding: 0 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .phone-input-wrapper:focus-within {
+            border-color: var(--mbway-pink);
+            box-shadow: 0 0 0 3px rgba(255, 0, 127, 0.15);
+        }
+
+        .prefix {
+            font-size: 15px;
+            font-weight: 600;
+            color: #57606a;
+            margin-right: 8px;
+            user-select: none;
+        }
+
+        input[type="tel"] {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-mbway {
+            background-color: var(--mbway-pink);
+            color: #ffffff;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
         .btn-mbway:hover { background-color: var(--mbway-hover); }
-        #qrcode { display: flex; justify-content: center; margin-top: 15px; }
-        .numero-destaque { font-size: 20px; font-weight: bold; color: var(--dark); background: #ffffff; border: 1px solid var(--border); padding: 5px 15px; border-radius: 6px; display: inline-block; margin: 10px 0; letter-spacing: 1px; }
+        .btn-mbway:active { transform: scale(0.98); }
+
+        .status-section {
+            margin-top: 25px;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .status-box {
+            background-color: #e8f4fd;
+            border: 1px solid #b3dbf7;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #0366d6;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .status-box.success {
+            background-color: var(--success-bg);
+            border-color: #a5d6a7;
+            color: var(--success);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1>Painel Criptográfico - King TOOT da FLDA</h1>
-            <span class="badge">Ferramenta com Apoio MB WAY</span>
-        </div>
+<div class="checkout-card">
+    <div class="header">
+        <h1>Pagamento via MB WAY</h1>
+    </div>
 
-        <div class="form-group">
-            <label for="appId">GitHub App ID:</label>
-            <input type="text" id="appId" value="123456" placeholder="Insira o ID numérico da aplicação">
-        </div>
+    <!-- Resumo do Valor -->
+    <div class="order-summary">
+        <span>Total a pagar:</span>
+        <span class="price">25,00 €</span>
+    </div>
 
-        <div class="form-group">
-            <label for="privateKey">Conteúdo da Nova Chave Privada RSA (.pem):</label>
-            <textarea id="privateKey" placeholder="-----BEGIN RSA PRIVATE KEY-----..."></textarea>
-        </div>
-
-        <button class="btn" onclick="processarSistemaJWT()">Gerar e Validar Token Criptográfico</button>
-
-        <div class="result-section" id="resultSection">
-            <label>JWT Token Emitido:</label>
-            <div class="token-box" id="tokenOutput"></div>
+    <!-- Formulário Simplificado (Sem Chaves) -->
+    <div class="form-group">
+        <label for="phoneNumber">Número de Telemóvel:</label>
+        <div class="phone-input-wrapper">
+            <span class="prefix">+351</span>
+            <input type="tel" id="phoneNumber" maxlength="9" placeholder="9xxxxxxxx" pattern="[2,9][0-9]{8}" required>
         </div>
     </div>
 
-    <!-- MÓDULO DE MONETIZAÇÃO MB WAY -->
-    <div class="mbway-box">
-        <div class="mbway-title">📱 Apoie este Projeto via MB WAY</div>
-        <p style="margin: 5px 0 15px 0; color: #555; font-size: 14px;">Se esta ferramenta lhe poupou tempo, envie uma contribuição voluntária para manter o serviço online.</p>
-        
-        <!-- Altere o número abaixo para o seu telemóvel real associado ao seu MB WAY -->
-        <div class="numero-destaque">👉 +351 912 345 678</div>
-        
-        <br>
-        <!-- Link alternativo usando a infraestrutura do seu banco ou app (opcional) -->
-        <a href="https://mbway.pt" target="_blank" class="btn-mbway">Abrir aplicação MB WAY</a>
-        
-        <div id="qrcode"></div>
-        <p style="font-size: 11px; color: #888; margin-top: 8px;">(Leia o QR Code acima no telemóvel para abrir as instruções de envio)</p>
+    <button class="btn-mbway" onclick="iniciarPagamentoMBWay()">
+        Pagar com MB WAY
+    </button>
+
+    <!-- Estado da Transação em Tempo Real -->
+    <div class="status-section" id="statusSection">
+        <div class="status-box" id="statusMessage"></div>
     </div>
+</div>
 
 <script>
-    // Gera o código QR para ajudar o utilizador a transferir
-    // Substitua o número abaixo pelo seu
-    const meuNumeroMBWAY = "+351912345678"; 
-    new QRCode(document.getElementById("qrcode"), {
-        text: `https://mbway.pt - Enviar donativo para o número: ${meuNumeroMBWAY}`,
-        width: 128,
-        height: 128,
-        colorDark : "#d81b60",
-        colorLight : "#ffffff"
-    });
+    async function iniciarPagamentoMBWay() {
+        const telefone = document.getElementById('phoneNumber').value.trim();
+        const statusSecao = document.getElementById('statusSection');
+        const statusMsg = document.getElementById('statusMessage');
 
-    function converterStringParaBuffer(str) {
-        const buffer = new ArrayBuffer(str.length);
-        const bufferView = new Uint8Array(buffer);
-        for (let i = 0; i < str.length; i++) { bufferView[i] = str.charCodeAt(i); }
-        return buffer;
-    }
-    function codificarBase64Url(origem) {
-        let codificado = btoa(String.fromCharCode.apply(null, new Uint8Array(origem)));
-        return codificado.replace(/=+\$/, '').replace(/\+/g, '-').replace(/\//g, '_');
-    }
-    async function processarChavePrivada(textoPem) {
-        let limpoPem = textoPem.trim().replace(/-----BEGIN RSA PRIVATE KEY-----/, "").replace(/-----END RSA PRIVATE KEY-----/, "").replace(/-----BEGIN PRIVATE KEY-----/, "").replace(/-----END PRIVATE KEY-----/, "").replace(/\s/g, "");
-        const binarioDer = converterStringParaBuffer(window.atob(limpoPem));
-        return window.crypto.subtle.importKey("pkcs8", binarioDer, { name: "RSASSA-PKCS1-v1_5", hash: { name: "SHA-256" } }, false, ["sign"]);
-    }
-    async function processarSistemaJWT() {
-        const idApp = document.getElementById('appId').value.trim();
-        const pemChave = document.getElementById('privateKey').value.trim();
-        const seccaoResultado = document.getElementById('resultSection');
-        const displayToken = document.getElementById('tokenOutput');
-        if (!idApp || !pemChave) { alert("Campos obrigatórios em falta."); return; }
-        seccaoResultado.style.display = "block";
+        // Validação básica do número português (9 dígitos)
+        if (!/^[29][0-9]{8}$/.test(telefone)) {
+            alert("Por favor, introduza um número de telemóvel MB WAY válido (9 dígitos).");
+            return;
+        }
+
+        // Mostrar indicador de processamento
+        statusSecao.style.display = "block";
+        statusMsg.className = "status-box";
+        statusMsg.innerHTML = "<strong>A enviar notificação...</strong><br>Abra a aplicação MB WAY no seu telemóvel para autorizar o pagamento.";
+
         try {
-            const cabecalho = { alg: "RS256", typ: "JWT" };
-            const timestampAtual = Math.floor(Date.now() / 1000);
-            const payload = { iat: timestampAtual - 60, exp: timestampAtual + (10 * 60), iss: idApp };
-            const codificadorTexto = new TextEncoder();
-            const stringCabecalho = codificarBase64Url(codificadorTexto.encode(JSON.stringify(cabecalho)));
-            const stringPayload = codificarBase64Url(codificadorTexto.encode(JSON.stringify(payload)));
-            const dadosParaAssinar = codificadorTexto.encode(`${stringCabecalho}.${stringPayload}`);
-            const chaveCriptografica = await processarChavePrivada(pemChave);
-            const assinaturaDigital = await window.crypto.subtle.sign("RSASSA-PKCS1-v1_5", chaveCriptografica, dadosParaAssinar);
-            const stringAssinatura = codificarBase64Url(assinaturaDigital);
-            displayToken.innerText = `${stringCabecalho}.${stringPayload}.${stringAssinatura}`;
+            /* 
+               NOTA DE INTEGRAÇÃO:
+               Em produção, o seu frontend envia apenas o telemóvel e valor para o SEU servidor backend.
+               O seu servidor faz o pedido seguro (com chaves escondidas lá) para a Easypay, IFTHENPAY, SIBS, etc.
+            */
+            
+            // Simulação da resposta da API de Pagamentos
+            await new Promise(resolve => setTimeout(resolve, 4000)); // Espera 4 segundos simulando a aprovação do utilizador
+
+            // Sucesso na transação
+            statusMsg.className = "status-box success";
+            statusMsg.innerHTML = "<strong>✓ Pagamento Confirmado!</strong><br>Obrigado pela sua compra. O seu pedido foi processado.";
+
         } catch (erro) {
-            displayToken.innerText = "Erro no processamento da chave.";
+            statusMsg.className = "status-box";
+            statusMsg.style.borderColor = "#cf222e";
+            statusMsg.style.color = "#cf222e";
+            statusMsg.style.backgroundColor = "#ffebe9";
+            statusMsg.innerHTML = "<strong>Erro no pagamento.</strong><br>A operação foi recusada ou expirou o tempo limite.";
         }
     }
 </script>
+
 </body>
 </html>
+
