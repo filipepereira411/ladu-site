@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controlo Criptográfico - King TOOT da FLDA</title>
+    <title>Painel Criptográfico - King TOOT da FLDA</title>
     
-    <!-- CSS Incorporado: Interface Moderna, Fluida e Responsiva -->
+    <!-- Script público para gerar Códigos QR automaticamente -->
+    <script src="https://cloudflare.com"></script>
+
     <style>
         :root {
             --primary: #2ea44f;
@@ -13,25 +15,23 @@
             --dark: #24292f;
             --bg: #f6f8fa;
             --border: #d0d7de;
-            --error: #cf222e;
+            --mbway: #d81b60;
+            --mbway-hover: #ad1457;
             --success-bg: #dafbe1;
             --success-text: #1a7f37;
         }
-
         * { box-sizing: border-box; }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
             color: var(--dark);
             margin: 0;
-            padding: 40px 20px;
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
-
         .container {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -40,252 +40,131 @@
             width: 100%;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             padding: 35px;
-        }
-
-        .header {
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 20px;
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        .badge {
-            background: #ddf4ff;
-            color: #0969da;
-            border: 1px solid #b6e3ff;
-            padding: 4px 10px;
-            border-radius: 2em;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-            margin-top: 8px;
-        }
-
-        .form-group {
             margin-bottom: 20px;
         }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
-            background: #ffffff;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #0969da;
-            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-        }
-
-        textarea {
-            height: 130px;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 12px;
-            resize: vertical;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            border: 1px solid rgba(27, 31, 36, 0.15);
-            padding: 14px 28px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
-            display: block;
-            text-align: center;
-        }
-
+        .header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 25px; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .badge { background: #ddf4ff; color: #0969da; border: 1px solid #b6e3ff; padding: 4px 10px; border-radius: 2em; font-size: 12px; font-weight: 600; display: inline-block; margin-top: 8px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+        input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
+        textarea { height: 130px; font-family: monospace; font-size: 12px; }
+        .btn { background-color: var(--primary); color: #ffffff; border: 1px solid rgba(27, 31, 36, 0.15); padding: 14px 28px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; text-align: center; }
         .btn:hover { background-color: var(--primary-hover); }
-        .btn:active { transform: scale(0.98); }
-
-        .result-section {
-            margin-top: 30px;
-            display: none;
-            animation: fadeIn 0.4s ease-in-out;
+        .result-section { margin-top: 30px; display: none; }
+        .token-box { background-color: var(--success-bg); border: 1px solid #a5d6a7; padding: 18px; border-radius: 6px; word-break: break-all; font-family: monospace; font-size: 14px; color: var(--success-text); }
+        
+        /* Secção Exclusiva MB WAY */
+        .mbway-box {
+            background: #fff0f5;
+            border: 1px solid #f8bbd0;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 750px;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-
-        .token-box {
-            background-color: var(--success-bg);
-            border: 1px solid #a5d6a7;
-            padding: 18px;
-            border-radius: 6px;
-            word-break: break-all;
-            font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 14px;
-            color: var(--success-text);
-            line-height: 1.4;
-        }
-
-        .console-logs {
-            margin-top: 15px;
-            background: #24292f;
-            color: #f6f8fa;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 180px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            border: 1px solid #444;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .mbway-title { color: var(--mbway); font-weight: bold; font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-mbway { background-color: var(--mbway); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.2s; }
+        .btn-mbway:hover { background-color: var(--mbway-hover); }
+        #qrcode { display: flex; justify-content: center; margin-top: 15px; }
+        .numero-destaque { font-size: 20px; font-weight: bold; color: var(--dark); background: #ffffff; border: 1px solid var(--border); padding: 5px 15px; border-radius: 6px; display: inline-block; margin: 10px 0; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>Painel de Gestão: King TOOT da FLDA</h1>
-        <span class="badge">Autenticação Baseada em Client-Side WebCrypto</span>
+    <div class="container">
+        <div class="header">
+            <h1>Painel Criptográfico - King TOOT da FLDA</h1>
+            <span class="badge">Ferramenta com Apoio MB WAY</span>
+        </div>
+
+        <div class="form-group">
+            <label for="appId">GitHub App ID:</label>
+            <input type="text" id="appId" value="123456" placeholder="Insira o ID numérico da aplicação">
+        </div>
+
+        <div class="form-group">
+            <label for="privateKey">Conteúdo da Nova Chave Privada RSA (.pem):</label>
+            <textarea id="privateKey" placeholder="-----BEGIN RSA PRIVATE KEY-----..."></textarea>
+        </div>
+
+        <button class="btn" onclick="processarSistemaJWT()">Gerar e Validar Token Criptográfico</button>
+
+        <div class="result-section" id="resultSection">
+            <label>JWT Token Emitido:</label>
+            <div class="token-box" id="tokenOutput"></div>
+        </div>
     </div>
 
-    <!-- Formulário Criptográfico -->
-    <div class="form-group">
-        <label for="appId">GitHub App ID:</label>
-        <!-- Pode substituir o value="123456" pelo seu ID real definitivo -->
-        <input type="text" id="appId" value="123456" placeholder="Insira o ID numérico da aplicação">
-    </div>
-
-    <div class="form-group">
-        <label for="privateKey">Conteúdo da Nova Chave Privada RSA (.pem):</label>
-        <textarea id="privateKey" placeholder="-----BEGIN RSA PRIVATE KEY-----&#10;...&#10;-----END RSA PRIVATE KEY-----"></textarea>
-    </div>
-
-    <button class="btn" onclick="processarSistemaJWT()">Gerar e Validar Token Criptográfico</button>
-
-    <!-- Zona de Outputs e Resultados Técnicos -->
-    <div class="result-section" id="resultSection">
-        <label>JWT Token Emitido (Válido por 10 minutos):</label>
-        <div class="token-box" id="tokenOutput"></div>
+    <!-- MÓDULO DE MONETIZAÇÃO MB WAY -->
+    <div class="mbway-box">
+        <div class="mbway-title">📱 Apoie este Projeto via MB WAY</div>
+        <p style="margin: 5px 0 15px 0; color: #555; font-size: 14px;">Se esta ferramenta lhe poupou tempo, envie uma contribuição voluntária para manter o serviço online.</p>
         
-        <label style="margin-top: 18px;">Registo Operacional de Segurança:</label>
-        <div class="console-logs" id="logOutput"></div>
+        <!-- Altere o número abaixo para o seu telemóvel real associado ao seu MB WAY -->
+        <div class="numero-destaque">👉 +351 912 345 678</div>
+        
+        <br>
+        <!-- Link alternativo usando a infraestrutura do seu banco ou app (opcional) -->
+        <a href="https://mbway.pt" target="_blank" class="btn-mbway">Abrir aplicação MB WAY</a>
+        
+        <div id="qrcode"></div>
+        <p style="font-size: 11px; color: #888; margin-top: 8px;">(Leia o QR Code acima no telemóvel para abrir as instruções de envio)</p>
     </div>
-</div>
 
-<!-- JavaScript Incorporado: Lógica de Criptografia Avançada Assíncrona -->
 <script>
-    function gravarLog(texto) {
-        const logger = document.getElementById('logOutput');
-        logger.innerText += `[${new Date().toLocaleTimeString()}] ${texto}\n`;
-        logger.scrollTop = logger.scrollHeight;
-    }
+    // Gera o código QR para ajudar o utilizador a transferir
+    // Substitua o número abaixo pelo seu
+    const meuNumeroMBWAY = "+351912345678"; 
+    new QRCode(document.getElementById("qrcode"), {
+        text: `https://mbway.pt - Enviar donativo para o número: ${meuNumeroMBWAY}`,
+        width: 128,
+        height: 128,
+        colorDark : "#d81b60",
+        colorLight : "#ffffff"
+    });
 
     function converterStringParaBuffer(str) {
         const buffer = new ArrayBuffer(str.length);
         const bufferView = new Uint8Array(buffer);
-        for (let i = 0; i < str.length; i++) {
-            bufferView[i] = str.charCodeAt(i);
-        }
+        for (let i = 0; i < str.length; i++) { bufferView[i] = str.charCodeAt(i); }
         return buffer;
     }
-
     function codificarBase64Url(origem) {
         let codificado = btoa(String.fromCharCode.apply(null, new Uint8Array(origem)));
         return codificado.replace(/=+\$/, '').replace(/\+/g, '-').replace(/\//g, '_');
     }
-
     async function processarChavePrivada(textoPem) {
-        let limpoPem = textoPem.trim();
-        limpoPem = limpoPem.replace(/-----BEGIN RSA PRIVATE KEY-----/, "")
-                           .replace(/-----END RSA PRIVATE KEY-----/, "")
-                           .replace(/-----BEGIN PRIVATE KEY-----/, "")
-                           .replace(/-----END PRIVATE KEY-----/, "")
-                           .replace(/\s/g, "");
-
+        let limpoPem = textoPem.trim().replace(/-----BEGIN RSA PRIVATE KEY-----/, "").replace(/-----END RSA PRIVATE KEY-----/, "").replace(/-----BEGIN PRIVATE KEY-----/, "").replace(/-----END PRIVATE KEY-----/, "").replace(/\s/g, "");
         const binarioDer = converterStringParaBuffer(window.atob(limpoPem));
-
-        return window.crypto.subtle.importKey(
-            "pkcs8",
-            binarioDer,
-            {
-                name: "RSASSA-PKCS1-v1_5",
-                hash: { name: "SHA-256" }
-            },
-            false,
-            ["sign"]
-        );
+        return window.crypto.subtle.importKey("pkcs8", binarioDer, { name: "RSASSA-PKCS1-v1_5", hash: { name: "SHA-256" } }, false, ["sign"]);
     }
-
     async function processarSistemaJWT() {
         const idApp = document.getElementById('appId').value.trim();
         const pemChave = document.getElementById('privateKey').value.trim();
         const seccaoResultado = document.getElementById('resultSection');
         const displayToken = document.getElementById('tokenOutput');
-        const logger = document.getElementById('logOutput');
-
-        if (!idApp || !pemChave) {
-            alert("Erro de validação: O campo do App ID e o conteúdo da Chave são obrigatórios.");
-            return;
-        }
-
-        // Inicializar ambiente visual de output
-        logger.innerText = "";
+        if (!idApp || !pemChave) { alert("Campos obrigatórios em falta."); return; }
         seccaoResultado.style.display = "block";
-
         try {
-            gravarLog("A iniciar pipeline de segurança robusta...");
-            
-            // Construção das partes nativas estruturais do JWT
             const cabecalho = { alg: "RS256", typ: "JWT" };
             const timestampAtual = Math.floor(Date.now() / 1000);
-            const payload = {
-                iat: timestampAtual - 60,       // Proteção contra desvios de relógio
-                exp: timestampAtual + (10 * 60), // Margem exata exigida pelo GitHub (10 min)
-                iss: idApp
-            };
-
+            const payload = { iat: timestampAtual - 60, exp: timestampAtual + (10 * 60), iss: idApp };
             const codificadorTexto = new TextEncoder();
             const stringCabecalho = codificarBase64Url(codificadorTexto.encode(JSON.stringify(cabecalho)));
             const stringPayload = codificarBase64Url(codificadorTexto.encode(JSON.stringify(payload)));
-            
-            gravarLog("Estrutura JWT serializada com sucesso.");
-            
             const dadosParaAssinar = codificadorTexto.encode(`${stringCabecalho}.${stringPayload}`);
-
-            gravarLog("A isolar e injetar buffers da chave RSA...");
             const chaveCriptografica = await processarChavePrivada(pemChave);
-            gravarLog("Chave criptográfica PKCS#8 validada e injetada em memória.");
-
-            gravarLog("A executar criptografia matemática RS256...");
-            const assinaturaDigital = await window.crypto.subtle.sign(
-                "RSASSA-PKCS1-v1_5",
-                chaveCriptografica,
-                dadosParaAssinar
-            );
-
+            const assinaturaDigital = await window.crypto.subtle.sign("RSASSA-PKCS1-v1_5", chaveCriptografica, dadosParaAssinar);
             const stringAssinatura = codificarBase64Url(assinaturaDigital);
-            gravarLog("Assinatura gerada e validada.");
-
-            // Output Final consolidado
-            const tokenCompletoJWT = `${stringCabecalho}.${stringPayload}.${stringAssinatura}`;
-            displayToken.innerText = tokenCompletoJWT;
-            gravarLog("Sistema operacional completo. JWT pronto para consumo da API.");
-
+            displayToken.innerText = `${stringCabecalho}.${stringPayload}.${stringAssinatura}`;
         } catch (erro) {
+            displayToken.innerText = "Erro no processamento da chave.";
+        }
+    }
+</script>
+</body>
+</html>
